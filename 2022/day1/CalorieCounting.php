@@ -1,14 +1,20 @@
 <?php
 
-$file = fopen("input.txt", "r");
-if ($file) {
+$filename = "input.txt";
+
+if (!file_exists($filename)) {
+    echo "Input file not found!" . PHP_EOL;
+    exit;
+}
+
+$file = fopen($filename, "r");
 
     $biggestSum = 0;
     $currentSum = 0;
 
     while ($line = fgets($file)) {
         if (strlen($line) !== 1) {
-            $currentSum += (int) $line;
+            $currentSum += (int)$line;
             continue;
         }
         if ($currentSum > $biggestSum) {
@@ -19,9 +25,5 @@ if ($file) {
     }
 
     fclose($file);
-}
 
-echo "biggest sum = " . $biggestSum;
-
-
-?>
+echo "biggest sum = " . $biggestSum . PHP_EOL;
