@@ -12,13 +12,13 @@ $score = 0;
 while ($line = fgets($file)) {
     switch (trim($line)) {
         case 'A X':
-            $score += (1 + 3);
+            $score += (3 + 0);
             break;
         case 'A Y':
-            $score += (2 + 6);
+            $score += (1 + 3);
             break;
         case 'A Z':
-            $score += (3 + 0);
+            $score += (2 + 6);
             break;
         case 'B X':
             $score += (1 + 0);
@@ -30,13 +30,13 @@ while ($line = fgets($file)) {
             $score += (3 + 6);
             break;
         case 'C X':
-            $score += (1 + 6);
-            break;
-        case 'C Y':
             $score += (2 + 0);
             break;
-        case 'C Z':
+        case 'C Y':
             $score += (3 + 3);
+            break;
+        case 'C Z':
+            $score += (1 + 6);
             break;
     }
 }
