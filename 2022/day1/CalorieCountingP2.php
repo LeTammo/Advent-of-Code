@@ -1,11 +1,8 @@
 <?php
 
-$filename = "input.txt";
-if (!file_exists($filename)) {
-    echo "Input file not found!" . PHP_EOL;
-    exit;
-}
-$file = fopen($filename, "r");
+require_once './../Misc.php';
+
+$file = readInputFile('input.txt');
 
 $biggestSums = [0, 0, 0];
 $currentSum = 0;
