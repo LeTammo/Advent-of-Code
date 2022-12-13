@@ -1,14 +1,8 @@
 <?php
 
 require_once 'Misc.php';
-
-$filename = "input.txt";
-if (!file_exists($filename)) {
-    echo "Input file not found!" . PHP_EOL;
-    exit;
-}
-
-$file = fopen($filename, "rb");
+require_once './../Misc.php';
+$file = readInputFile('input.txt');
 
 $crates = readCrateInput($file);
 
