@@ -1,13 +1,9 @@
 <?php
 
 require_once "Misc.php";
+require_once './../Misc.php';
 
-$filename = 'input.txt';
-if (!file_exists($filename)) {
-    echo "Input file not found!" . PHP_EOL;
-    exit;
-}
-$file = fopen($filename, 'r');
+$file = readInputFile('input.txt');
 
 $sum = 0;
 
