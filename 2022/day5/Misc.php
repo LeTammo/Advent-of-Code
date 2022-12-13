@@ -17,10 +17,10 @@ function printCrates(array $crates, int $from, int $to)
  */
 function printPrettyCrates(array $crates)
 {
-    for ($i = -1 + max(array_map(static fn($crate) => strlen($crate), $crates)); $i >= 0; $i--) {
-        foreach ($crates as $crate) {
-            if (strlen($crate) > $i) {
-                $crate = strrev($crate)[$i];
+    for ($i = count(max($crates)); $i >= 0; $i--) {
+        foreach ($crates as $stack) {
+            if (count($stack) > $i) {
+                $crate = $stack[$i];
                 echo "[$crate] ";
             } else {
                 echo "    ";
