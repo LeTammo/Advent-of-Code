@@ -22,7 +22,7 @@ runOnInputFile(function ($file) {
     echo $distance;
 });
 
-function qicksort(array $numbers): array
+function customSort(array $numbers): array
 {
     // TODO
 }
