@@ -4,10 +4,10 @@ require_once './../../Misc.php';
 
 runOnInputFile(static function ($file): void
 {
-    $saveReports = 0;
+    $safeReports = 0;
 
     while ($line = fgets($file)) {
-        $report = explode(' ', trim($line));
+        $report = array_map('intval', explode(' ', trim($line)));
 
         $result = checkReport($report);
 
@@ -33,12 +33,12 @@ runOnInputFile(static function ($file): void
             }
         }
 
-        $saveReports++;
+        $safeReports++;
     }
 
-    echo $saveReports . "\n";
+    echo $safeReports . "\n";
 
-    if ($saveReports !== 488) {
+    if ($safeReports !== 488) {
         echo "Something went wrong\n";
     } else {
         echo "All good\n";
