@@ -26,10 +26,8 @@ function parseAndCheckLine(string $line): bool
         return true;
     }
 
-    // Elements to test for removal (previous   , current, next)
-    $elementsToTest = [$result-1, $result, $result+1];
-
-    foreach ($elementsToTest as $indexToRemove) {
+    // Test to remove the previous, current or next element
+    foreach ([$result-1, $result, $result+1] as $indexToRemove) {
         // Skip if the index is out of bounds
         if (!isset($report[$indexToRemove])) {
             continue;
