@@ -7,22 +7,24 @@ runOnInputFile(static function ($file): void
     $safeReports = 0;
 
     while ($line = fgets($file)) {
-        $report = array_map('intval', explode(' ', trim($line)));
-
-        $result = checkReport($report);
-        if (!is_int($result)) {
-            $safeReports++;
-            continue;
-        }
-
-        if (tryToFixReport($result, $report)) {
-            $safeReports++;
-        }
+        $safeReports += checkLine($line);
     }
 
-    echo "$safeReports\n";
+    echo "Safe reports: $safeReports\n";
     echo $safeReports === 488 ? "All good\n" : "Something went wrong\n";
 });
+
+function checkLine(string $line): bool
+{
+    $report = array_map('intval', explode(' ', trim($line)));
+
+    $result = checkReport($report);
+    if (!is_int($result)) {
+        return true;
+    }
+
+    return tryToFixReport($result, $report);
+}
 
 function checkReport(array $report)
 {
