@@ -11,7 +11,6 @@ runOnInputFile(static function ($file): void
     }
 
     echo "Safe reports: $safeReports\n";
-    echo $safeReports === 488 ? "All good\n" : "Something went wrong\n";
 });
 
 function checkLine(string $line): bool
