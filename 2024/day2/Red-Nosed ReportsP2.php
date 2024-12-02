@@ -7,22 +7,45 @@ runOnInputFile(static function ($file): void
     $safeReports = 0;
 
     while ($line = fgets($file)) {
-        $safeReports += checkLine($line);
+        $safeReports += parseAndCheckLine($line);
     }
 
     echo "Safe reports: $safeReports\n";
 });
 
-function checkLine(string $line): bool
+function parseAndCheckLine(string $line): bool
 {
+    // Parse the line to get the report
     $report = array_map('intval', explode(' ', trim($line)));
 
+    // Check the report
     $result = checkReport($report);
+
+    // If the result is valid, return true
     if (!is_int($result)) {
         return true;
     }
 
-    return tryToFixReport($result, $report);
+    // Elements to test for removal (previous   , current, next)
+    $elementsToTest = [$result-1, $result, $result+1];
+
+    foreach ($elementsToTest as $indexToRemove) {
+        // Skip if the index is out of bounds
+        if (!isset($report[$indexToRemove])) {
+            continue;
+        }
+
+        // Create a modified report excluding the current index
+        $subReport = $report;
+        unset($subReport[$indexToRemove]);
+
+        // Re-index the array to avoid gaps in the keys and check the report
+        if (is_bool(checkReport(array_values($subReport)))) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function checkReport(array $report)
@@ -33,31 +56,6 @@ function checkReport(array $report)
         $distance = $orderFactor * ($report[$i] - $report[$i - 1]);
         if ($distance < 1 || $distance > 3) {
             return $i - 1;
-        }
-    }
-
-    return true;
-}
-
-function tryToFixReport(int $result, array $report): bool
-{
-    $reportA = $report;
-    unset($reportA[$result]);
-    $newResult = checkReport(array_values($reportA));
-
-    if ($newResult !== true) {
-        $reportB = $report;
-        unset($reportB[$result + 1]);
-        $newResult = checkReport(array_values($reportB));
-
-        if ($newResult !== true && isset($report[$result - 1])) {
-            $reportB = $report;
-            unset($reportB[$result - 1]);
-            $newResult = checkReport(array_values($reportB));
-        }
-
-        if ($newResult !== true) {
-            return false;
         }
     }
 
