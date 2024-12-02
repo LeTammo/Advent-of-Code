@@ -18,10 +18,8 @@ function parseAndCheckLine(string $line): bool
     // Parse the line to get the report
     $report = array_map('intval', explode(' ', trim($line)));
 
-    // Check the report
+    // Check the report, if the result is already valid, return true
     $result = checkReport($report);
-
-    // If the result is valid, return true
     if (!is_int($result)) {
         return true;
     }
