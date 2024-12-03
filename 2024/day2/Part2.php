@@ -2,9 +2,7 @@
 
 require_once './../../Misc.php';
 
-/**
- * Helper function from Misc.php to read the file called "input.txt"
- */
+
 runOnInputFile(static function ($file): void
 {
     $safeReports = 0;
@@ -16,9 +14,7 @@ runOnInputFile(static function ($file): void
     echo "Safe reports: $safeReports\n";
 });
 
-/**
- * Validates a report and checks if it can be corrected by removing one element.
- */
+/** Validates a report and checks if it can be corrected by removing one element. */
 function isSafeReport(string $line): bool
 {
     // Parse the line to get the report
@@ -48,12 +44,8 @@ function isSafeReport(string $line): bool
     return false;
 }
 
-/**
- * Checks if a report is valid.
- *
- * @return int|bool Returns `true` if valid, or the index of the problematic element.
- */
-function isValidReport(array $report)
+/** Checks if a report is valid. */
+function isValidReport(array $report): bool|int
 {
     if (count($report) < 2) {
         return true; // Not part of the problem, but could be considered valid/invalid
