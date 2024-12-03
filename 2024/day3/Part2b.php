@@ -15,10 +15,10 @@ runOnInputFile(static function ($file): void
         // Find the next "don't()"
         $pointerDont = strpos($programString, "don't()", $pointerDo) ?: strlen($programString);
 
-        // get the substring for the enabled multiplications
+        // Get the substring for the enabled multiplications
         $substring = substr($programString, $pointerDo, $pointerDont - $pointerDo);
 
-        // find all multiplications in the substring and calculate the sum
+        // Find all multiplications in the substring
         preg_match_all('/mul\((\d+),(\d+)\)/', $substring, $multiplications, PREG_SET_ORDER);
         foreach ($multiplications as [$_, $a, $b]) {
             $sum += $a * $b;
