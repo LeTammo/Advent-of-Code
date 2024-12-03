@@ -20,9 +20,9 @@ runOnInputFile(static function ($file): void
 
         // Find all multiplications in the substring
         preg_match_all('/mul\((\d+),(\d+)\)/', $substring, $multiplications, PREG_SET_ORDER);
-        foreach ($multiplications as [$_, $a, $b]) {
-            $sum += $a * $b;
-        }
+
+        // Calculate the sum
+        $sum += array_sum(array_map(static fn($m) => $m[1] * $m[2], $multiplications));
 
         // Find the next "do()"
         $pointerDo = strpos($programString, "do()", $pointerDont);
