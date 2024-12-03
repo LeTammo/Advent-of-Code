@@ -5,11 +5,7 @@ require_once './../../Misc.php';
 
 runOnInputFile(static function ($file): void
 {
-    // Concatenate all lines of the file into a single string
-    $programString = "";
-    while ($line = trim(fgets($file))) {
-        $programString .= $line;
-    }
+    $programString = trim(stream_get_contents($file));
 
     $sum = 0;
     $pointerDo = 0;
