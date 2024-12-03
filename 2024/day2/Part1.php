@@ -22,4 +22,4 @@ runOnInputFile(static function ($file) {
     }
 
     echo $saveReports;
-});
+}, "input.txt");

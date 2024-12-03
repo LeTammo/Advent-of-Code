@@ -11,4 +11,4 @@ runOnInputFile(static function ($file): void
     $sum = array_sum(array_map(static fn($m) => $m[1] * $m[2], $multiplications));
 
     echo "Solution for Part 1: $sum\n";
-});
+}, "input.txt");
