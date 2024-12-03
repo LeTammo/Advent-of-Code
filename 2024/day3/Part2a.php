@@ -62,7 +62,7 @@ function strpos_all($haystack, $needle): array
     $offset = 0;
     while (($pos = strpos($haystack, $needle, $offset)) !== FALSE) {
         $positions[] = $pos;
-        $offset = $pos + 1;
+        $offset = $pos + strlen($needle);
     }
 
     return $positions;
