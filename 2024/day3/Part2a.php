@@ -5,11 +5,7 @@ require_once './../../Misc.php';
 
 runOnInputFile(static function ($file): void
 {
-    // Concatenate all lines of the file
-    $programString = "";
-    while ($line = trim(fgets($file))) {
-        $programString .= $line;
-    }
+    $programString = trim(stream_get_contents($file));
 
     // Find all occurrences of "do" and "don't"
     $dos = strpos_all($programString, "do()");
@@ -36,11 +32,11 @@ runOnInputFile(static function ($file): void
         // get the substring for the enabled multiplications
         $substring = substr($programString, $dos[$pointer_do], $donts[$pointer_dont] - $dos[$pointer_do]);
 
-        // find all multiplications in the substring and calculate the sum
+        // find all multiplications in the substring
         preg_match_all('/mul\((\d+),(\d+)\)/', $substring, $multiplications, PREG_SET_ORDER);
-        foreach ($multiplications as [$_, $a, $b]) {
-            $sum += $a * $b;
-        }
+
+        // Calculate the sum
+        $sum += array_sum(array_map(static fn($m) => $m[1] * $m[2], $multiplications));
     }
 
     echo "Solution for Part 2: $sum\n";
