@@ -12,27 +12,29 @@ runOnInputFile(static function ($file): void
     }
 
     echo "Safe reports: $safeReports\n";
-});
+}, "input.txt");
 
 /** Validates a report and checks if it can be corrected by removing one element. */
-function isValidReport(string $line): bool
-{
-    // Parse the line to get the report
+function isValidReport(string $line): bool {
     $report = array_map('intval', explode(' ', trim($line)));
 
-    // Check if the report is valid
-    $invalidKey = checkForInvalidNumber($report);
-    if (!$invalidKey) {
+    $invalidIndex = findInvalidIndex($report);
+
+    if (!$invalidIndex) {
         return true;
     }
 
-    // Try to correct the report by removing the previous, current, or next element
-    foreach ([$invalidKey - 2, $invalidKey - 1, $invalidKey] as $indexToRemove) {
-        // Create a modified report excluding the current index
-        $subReport = $report;
-        unset($subReport[$indexToRemove]);
+    return tryCorrectingReport($report, $invalidIndex);
+}
 
-        if (!checkForInvalidNumber(array_values($subReport))) {
+/** Tries to correct the report by removing one element. */
+function tryCorrectingReport(array $report, int $invalidIndex): bool {
+    $possibleRemovalIndices = [$invalidIndex, $invalidIndex - 1, $invalidIndex - 2];
+
+    foreach ($possibleRemovalIndices as $indexToRemove) {
+        $subReport = array_merge(array_slice($report, 0, $indexToRemove), array_slice($report, $indexToRemove + 1));
+
+        if (!findInvalidIndex($subReport)) {
             return true;
         }
     }
@@ -40,15 +42,14 @@ function isValidReport(string $line): bool
     return false;
 }
 
-/** Checks if a report is valid. */
-function checkForInvalidNumber(array $report): int
-{
+/** Checks if a report is valid and returns the index of the first invalid element. */
+function findInvalidIndex(array $report): int {
     $orderFactor = $report[0] < $report[1] ? 1 : -1;
 
     for ($i = 1, $max = count($report); $i < $max; $i++) {
         $distance = $orderFactor * ($report[$i] - $report[$i - 1]);
         if ($distance < 1 || $distance > 3) {
-            return $i; // Return the index of the irregular element
+            return $i;
         }
     }
 
