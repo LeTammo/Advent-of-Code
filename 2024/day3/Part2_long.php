@@ -40,7 +40,7 @@ runOnInputFile(static function ($file): void
     }
 
     echo "Solution for Part 2: $sum\n";
-});
+}, "input.txt");
 
 
 /**
