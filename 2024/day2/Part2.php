@@ -8,16 +8,15 @@ runOnInputFile(static function ($file): void
     $safeReports = 0;
 
     while ($line = fgets($file)) {
-        $safeReports += isValidReport($line);
+        $report = array_map('intval', explode(' ', trim($line)));
+        $safeReports += isValidReport($report);
     }
 
     echo "Safe reports: $safeReports\n";
 }, "input.txt");
 
 /** Validates a report and checks if it can be corrected by removing one element. */
-function isValidReport(string $line): bool {
-    $report = array_map('intval', explode(' ', trim($line)));
-
+function isValidReport(array $report): bool {
     $invalidIndex = findInvalidIndex($report);
 
     if (!$invalidIndex) {
