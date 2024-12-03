@@ -8,35 +8,31 @@ runOnInputFile(static function ($file): void
     $safeReports = 0;
 
     while ($line = fgets($file)) {
-        $safeReports += isSafeReport($line);
+        $safeReports += isValidReport($line);
     }
 
     echo "Safe reports: $safeReports\n";
 });
 
 /** Validates a report and checks if it can be corrected by removing one element. */
-function isSafeReport(string $line): bool
+function isValidReport(string $line): bool
 {
     // Parse the line to get the report
     $report = array_map('intval', explode(' ', trim($line)));
 
     // Check if the report is valid
-    $result = isValidReport($report);
-    if ($result === true) {
+    $invalidKey = checkForInvalidNumber($report);
+    if (!$invalidKey) {
         return true;
     }
 
     // Try to correct the report by removing the previous, current, or next element
-    foreach ([$result - 1, $result, $result + 1] as $indexToRemove) {
-        if (!isset($report[$indexToRemove])) {
-            continue;
-        }
-
+    foreach ([$invalidKey - 2, $invalidKey - 1, $invalidKey] as $indexToRemove) {
         // Create a modified report excluding the current index
         $subReport = $report;
         unset($subReport[$indexToRemove]);
 
-        if (isValidReport(array_values($subReport)) === true) {
+        if (!checkForInvalidNumber(array_values($subReport))) {
             return true;
         }
     }
@@ -45,20 +41,16 @@ function isSafeReport(string $line): bool
 }
 
 /** Checks if a report is valid. */
-function isValidReport(array $report): bool|int
+function checkForInvalidNumber(array $report): int
 {
-    if (count($report) < 2) {
-        return true; // Not part of the problem, but could be considered valid/invalid
-    }
-
     $orderFactor = $report[0] < $report[1] ? 1 : -1;
 
     for ($i = 1, $max = count($report); $i < $max; $i++) {
         $distance = $orderFactor * ($report[$i] - $report[$i - 1]);
         if ($distance < 1 || $distance > 3) {
-            return $i - 1; // Return the index of the offending element
+            return $i; // Return the index of the irregular element
         }
     }
 
-    return true;
+    return 0;
 }
