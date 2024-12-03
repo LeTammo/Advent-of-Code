@@ -9,12 +9,9 @@ runOnInputFile(static function ($file): void
 
     $sum = 0;
     $pointerDo = 0;
-    $pointerDont = 0;
+    $pointerDont = strpos($programString, "don't()", $pointerDo);
 
     while ($pointerDo !== false) {
-        // Find the next "don't()"
-        $pointerDont = strpos($programString, "don't()", $pointerDo) ?: strlen($programString);
-
         // Get the substring for the enabled multiplications
         $substring = substr($programString, $pointerDo, $pointerDont - $pointerDo);
 
@@ -24,8 +21,9 @@ runOnInputFile(static function ($file): void
         // Calculate the sum
         $sum += array_sum(array_map(static fn($m) => $m[1] * $m[2], $multiplications));
 
-        // Find the next "do()"
+        // Find the next "do()" and "don't()"
         $pointerDo = strpos($programString, "do()", $pointerDont);
+        $pointerDont = strpos($programString, "don't()", $pointerDo) ?: strlen($programString);
     }
 
     echo "Solution for Part 2: $sum\n";
