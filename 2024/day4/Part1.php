@@ -12,24 +12,26 @@ const DIRECTIONS = [
     [ 1, -1], [ 1, 0], [ 1, 1],
 ];
 
-runOnInputFile(static function ($file): void
-{
+runOnInputFile(static function ($file): void {
     $wordGrid = [];
     while ($line = fgets($file)) {
         $wordGrid[] = str_split(trim($line));
     }
 
-    $xmasAppearances = 0;
+    echo "Solution for Part 1: " . findXmasAppearances($wordGrid) . PHP_EOL;
+}, "input.txt");
 
+function findXmasAppearances(array $wordGrid): int
+{
+    $xmasAppearances = 0;
     foreach ($wordGrid as $i => $iValue) {
         foreach ($iValue as $j => $jValue) {
             search($wordGrid, $i, $j, $xmasAppearances);
         }
     }
 
-
-    echo "Solution for Part 1: $xmasAppearances\n";
-}, "input.txt");
+    return $xmasAppearances;
+}
 
 function search(array $wordGrid, int $i, int $j, int &$xmasAppearances): void
 {
