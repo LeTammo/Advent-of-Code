@@ -3,12 +3,7 @@
 require_once './../../Misc.php';
 
 
-$directions = [
-    "^" => [-1, 0],
-    ">" => [0, 1],
-    "v" => [1, 0],
-    "<" => [0, -1],
-];
+$directions = [ [-1, 0], [0, 1], [1, 0], [0, -1] ];
 
 runOnInputFile(static function ($file): void {
     global $directions;
@@ -23,24 +18,20 @@ runOnInputFile(static function ($file): void {
 
         $row = str_split($line);
         $field[] = $row;
-        foreach (["^", "v", "<", ">"] as $char) {
+        foreach (["^", "v", "<", ">"] as $index => $char) {
             if ($j = array_search($char, $row)) {
                 $position = [$i, $j];
-                $direction = $directions[$char];
+                $direction = $directions[$index];
             }
         }
     }
 
-    echoValues($position, ", ");
-    echoValues($direction, ", ");
+    echo "Solution for Part 1: " . findPath($field, $directions, $position, $direction, $index) . PHP_EOL;
+}, "input.txt");
 
-    echo "Solution for Part 1: " . findPath($field, $directions, $position, $direction) . PHP_EOL;
-}, "example.txt");
-
-function findPath(array $field, array $directions, array $position, array $direction): int
+function findPath(array $field, array $directions, array $position, array $direction, int $index): int
 {
     $nextPosition = [];
-    $uniqueSteps = 0;
 
     while (true) {
         $nextPosition[0] = $position[0] + $direction[0];
@@ -48,20 +39,25 @@ function findPath(array $field, array $directions, array $position, array $direc
         if ($nextPosition[0] < 0 || $nextPosition[0] >= count($field) || $nextPosition[1] < 0 || $nextPosition[1] >= count($field[0])) {
             break;
         }
+        $field[$position[0]][$position[1]] = "X";
+        //echoField($field);
 
         if ($field[$nextPosition[0]][$nextPosition[1]] !== '#') {
             $position = $nextPosition;
-            $uniqueSteps++;
             continue;
         }
 
-        next($directions);
-        $field[$position[0]][$position[1]] = key($directions);
-        $direction = current($directions);
-
-        echo "Changed direction to: " . echoValues($direction) . PHP_EOL;
-        sleep(1);
+        $index = ($index + 1) % 4;
+        $direction = $directions[$index];
     }
 
-    return $uniqueSteps;
+    return array_sum(array_map(fn($row) => array_count_values($row)['X'] ?? 0, $field)) + 1;
+}
+
+function echoField(array $field): void
+{
+    foreach ($field as $row) {
+        echo implode("", $row) . PHP_EOL;
+    }
+    echo PHP_EOL;
 }
