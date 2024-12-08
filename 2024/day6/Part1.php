@@ -36,11 +36,13 @@ function findPath(array $field, array $directions, array $position, array $direc
     while (true) {
         $nextPosition[0] = $position[0] + $direction[0];
         $nextPosition[1] = $position[1] + $direction[1];
+
+        $field[$position[0]][$position[1]] = "X";
+        //echoField($field);
+
         if ($nextPosition[0] < 0 || $nextPosition[0] >= count($field) || $nextPosition[1] < 0 || $nextPosition[1] >= count($field[0])) {
             break;
         }
-        $field[$position[0]][$position[1]] = "X";
-        //echoField($field);
 
         if ($field[$nextPosition[0]][$nextPosition[1]] !== '#') {
             $position = $nextPosition;
@@ -51,7 +53,7 @@ function findPath(array $field, array $directions, array $position, array $direc
         $direction = $directions[$index];
     }
 
-    return array_sum(array_map(fn($row) => array_count_values($row)['X'] ?? 0, $field)) + 1;
+    return array_sum(array_map(fn($row) => array_count_values($row)['X'] ?? 0, $field));
 }
 
 function echoField(array $field): void
